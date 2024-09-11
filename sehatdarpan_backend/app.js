@@ -1,6 +1,5 @@
-// Ensure dotenv is required and configured only once
 const dotenv = require('dotenv');
-dotenv.config();  // Load environment variables from .env file
+dotenv.config();
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -19,6 +18,9 @@ mongoose.connect(process.env.MONGO_URI)
 // Routes (example)
 const patientRoutes = require('./routes/userRoutes');
 app.use('/api/patient', patientRoutes);
+
+const doctorRoutes = require('./routes/doctorRoutes');
+app.use('/api/doctor', doctorRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5001;

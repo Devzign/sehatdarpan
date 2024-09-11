@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-const jwt = require('jsonwebtoken'); 
-const User = require('../models/User'); 
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
 // Patient Registration Controller
 exports.patientRegister = async (req, res) => {
@@ -63,38 +63,38 @@ exports.patientRegister = async (req, res) => {
 
 //Patient Login
 exports.patientLogin = async (req, res) => {
-    const { userEmail, password } = req.body;
-  
-    try {
-      // Find the user by email
-      const user = await User.findOne({ userEmail });
-      if (!user) {
-        return res.status(400).json({ message: 'Invalid credentials' });
-      }
-  
-      // Check if the password matches
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-        return res.status(400).json({ message: 'Invalid credentials' });
-      }
-  
-      // Generate JWT token
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-        expiresIn: '1h', // Token expires in 1 hour
-      });
-  
-      res.status(200).json({
-        message: 'Login successful',
-        token,
-        user: {
-          id: user._id,
-          userName: user.userName,
-          userEmail: user.userEmail,
-          medicalCardNumber: user.medicalCardNumber,
-        },
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal Server Error' });
+  const { userEmail, password } = req.body;
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ userEmail });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
-  };
+
+    // Check if the password matches
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '1h', // Token expires in 1 hour
+    });
+
+    res.status(200).json({
+      message: 'Login successful',
+      token,
+      user: {
+        id: user._id,
+        userName: user.userName,
+        userEmail: user.userEmail,
+        medicalCardNumber: user.medicalCardNumber,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
