@@ -2,10 +2,6 @@
 
 rm -rf ./.amplify-hosting
 
-mkdir -p ./.amplify-hosting/compute
+mkdir -p ./.amplify-hosting/
 
-cp -r . ./.amplify-hosting/compute/default
-
-cp -r public ./.amplify-hosting/static
-
-cp deploy-manifest.json ./.amplify-hosting/deploy-manifest.json
+cp -r . ./.amplify-hosting/
