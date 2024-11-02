@@ -79,7 +79,7 @@ const doctorUserSchema = new mongoose.Schema({
       type: String,
       trim: true,
     },
-    medicalCardNumber: {
+    doctorCardNumber: {
       type: String,
       unique: true,
       trim: true,

@@ -1,4 +1,3 @@
-
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
@@ -25,8 +24,6 @@ exports.doctorRegister = async (req, res) => {
     } = req.body;
 
     try {
-
-
         // Validate email
         if (!validateEmail(userEmail)) {
             return res.status(400).json({
@@ -48,7 +45,7 @@ exports.doctorRegister = async (req, res) => {
             });
         }
 
-
+        // Check if the doctor already exists
         const doctorExists = await DoctorUser.findOne({
             $or: [{ userEmail }, { userMobileNumber }, { userAadharNumber }],
         });
@@ -56,9 +53,13 @@ exports.doctorRegister = async (req, res) => {
             return res.status(400).json({ message: 'Doctor already exists' });
         }
 
-        const medicalCardNumber = crypto.randomBytes(8).toString('hex').toUpperCase();
+        // Generate a unique doctor card number
+        const doctorCardNumber = crypto.randomBytes(8).toString('hex').toUpperCase();
+
+        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Create new doctor
         const newDoctor = new DoctorUser({
             userName,
             userEmail,
@@ -75,20 +76,22 @@ exports.doctorRegister = async (req, res) => {
             profilePicture,
             workingHours,
             password: hashedPassword,
+            doctorCardNumber,
         });
 
+        // Save doctor in the database
         await newDoctor.save();
 
+        // Return success response with doctorCardNumber
         res.status(201).json({
             message: 'Doctor registered successfully',
-            medicalCardNumber: newUser.medicalCardNumber,
+            doctorCardNumber: newDoctor.doctorCardNumber, // Include doctorCardNumber in response
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
-
 
 //Doctor Login
 exports.doctorLogin = async (req, res) => {
