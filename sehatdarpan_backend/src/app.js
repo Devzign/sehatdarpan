@@ -25,7 +25,9 @@ app.use('/api/doctor', doctorRoutes);
 const hospitalRoutes = require('./routes/hospitalRoutes');
 app.use('/api/hospital', hospitalRoutes);
 
-// Start the server
+const clinicRoutes = require('./routes/clinicRoutes');
+app.use('/api/clinic', clinicRoutes);
+
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
