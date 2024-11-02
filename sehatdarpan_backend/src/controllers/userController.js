@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-
+const { validatePassword, validateEmail, validatePhoneNumber } = require('../utils/validation');
 // Patient Registration Controller
 exports.patientRegister = async (req, res) => {
   const {
@@ -19,6 +19,28 @@ exports.patientRegister = async (req, res) => {
   } = req.body;
 
   try {
+
+    // Validate email
+    if (!validateEmail(userEmail)) {
+      return res.status(400).json({
+        message: 'Invalid email format. Example: example@example.com'
+      });
+    }
+
+    // Validate phone number
+    if (!validatePhoneNumber(userMobileNumber)) {
+      return res.status(400).json({
+        message: 'Invalid phone number format. Please enter a 10-digit number, e.g., 1234567890'
+      });
+    }
+
+    // Validate password
+    if (!validatePassword(password)) {
+      return res.status(400).json({
+        message: 'Password must be at least 8 characters long, contain at least one letter, one number, and one special character. Example: Password@123',
+      });
+    }
+
     // Check if the user already exists
     const userExists = await User.findOne({
       $or: [{ userEmail }, { userMobileNumber }, { userAadharNumber }],

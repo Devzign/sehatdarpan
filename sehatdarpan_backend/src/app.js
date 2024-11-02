@@ -22,6 +22,9 @@ app.use('/api/patient', patientRoutes);
 const doctorRoutes = require('./routes/doctorRoutes');
 app.use('/api/doctor', doctorRoutes);
 
+const hospitalRoutes = require('./routes/hospitalRoutes');
+app.use('/api/hospital', hospitalRoutes);
+
 // Start the server
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
